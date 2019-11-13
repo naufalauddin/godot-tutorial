@@ -119,8 +119,8 @@ Dalam ```lamp``` masukkan child note untuk membentuk bagian lampu.
 - Buat ```CSGPolygon``` dengan memilih Mode *Spin* pada tab Inspector, lalu ubah proyeksi menjadi *Front View* dan atur
 Titik pada polygon hingga membentuk trapesium untuk membentuk penutup lampu.
 
-![CSGPolygon Inspector](images/PolygonInspector)
-![CSGPolygon Trapezoid](images/PolygonTrapezoid)
+![CSGPolygon Inspector](images/PolygonInspector.jpg)
+![CSGPolygon Trapezoid](images/PolygonTrapezoid.jpg)
 
 Setelah jadi, atur ketiga child node sehingga membentuk sebuah lampu! Save lalu masukkan Scene tersebut ke dalam Scene
  World 1 dengan klik kanan pada Node World 1 pilih ```Instance Child Scene```.
@@ -148,7 +148,7 @@ Seperti yang sudah dipelajari pada Tutorial 4, sebuah level tidak lengkap tanpa 
 
 Misalkan kita ingin menambahkan halangan untuk player dapat menuju goal seperti field yang berlubang atau jurang yang hanya dapat dilewati menggunakan function jump yang telah anda buat pada tutorial 6.
 
-Buka Scene ```World 1```, lalu buat ```CSGCombiner``` baru dan centang ```Use Collision``` pada tab Inspector. Lalu masukkan Node ```Room 1``` ke dalam CSGCombiner yang telah dibuat. Tambahkan 2 ```CSGBox``` ke calam CSGCombiner masing-masing akan menjadi room yang baru dan lubang. Atur sedemikian rupa menggunakan operation ```Union``` untuk membuat ruang baru dan lubang.
+Buka Scene ```World 1```, lalu buat ```CSGCombiner``` baru dan centang ```Use Collision``` pada tab Inspector. Lalu masukkan Node ```Room 1``` ke dalam CSGCombiner yang telah dibuat. Tambahkan 2 ```CSGBox``` ke dalam CSGCombiner masing-masing akan menjadi room yang baru dan lubang. Atur sedemikian rupa menggunakan operation ```Union``` untuk membuat ruang baru dan lubang.
 
 ![Obstacle Mapping](images/ObstacleMap.jpg)
 ![Obstacle](images/obstacle.jpg)
