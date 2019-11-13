@@ -9,22 +9,21 @@ Di akhir tutorial ini, diharapkan kamu paham dengan penggunaan CSG.
 - [Tutorial 7 - Basic 3D Level Design](#Tutorial-7---Basic-3D-Level-Design)
   - [Daftar Isi](#daftar-isi)
   - [Pengantar](#pengantar)
-    - [Apa itu CSG?](#apa-itu-csg)
-    - [Fitur CSG](#fitur-csg)
-    - [3D Level Example](#3d-level-example)
-  - [Creating A Simple Level using CSG](#creating-a-simple-level-using-csg)
-    - [Preparation](#preparation)
-    - [Empty Room](#empty-room)
-    - [Making 3D Objects](#making-3d-objects)
-    - [Coloring 3D Objects](#coloring-3d-objects)
-  - [Obstacles and Goal Condition](#obstacles-and-goal-condition)
-    - [Adding Obstacles](#adding-obstacles)
-    - [Adding Goal Condition](#adding-goal-condition)
+    - [What Is a Level?](#What-Is-a-Level)
+    - [Level Example](#Level-Example)
+  - [Creating A Simple Level using TileMap](#Creating-A-Simple-Level-using-Tilemap)
+    - [Preparation](#Preparation)
+    - [Making Tile Set](#Making-Tile-Set)
+    - [Paint the TileMap](#Paint-the-TileMap)
+  - [Making the Camera Follows The Player](#Making-the-Camera-Follows-The-Player)
+    - [How Simple It Is](#How-Simple-It-Is)
+  - [Adding Area Trigger for Lose and Win Condition](#Adding-Area-Trigger-for-Lose-and-Win-Condition)
     - [Set Up](#set-up)
-    - [Using Signals](#using-signals)
-    - [Adding It to the Level](#adding-it-to-the-level)
+    - [What is Signals?](#What-is-Signals)
+    - [Using Signals](#Using-Signals)
+    - [Adding It to the Level](#Adding-It-to-the-Level)
   - [Bonus To Do](#bonus-to-do)
-  - [Instruksi Pengerjaan](#instruksi-pengerjaan)
+  - [Instruksi Pengerjaan](#Instruksi-Pengerjaan)
   - [Skema Penilaian](#skema-penilaian)
   - [Pengumpulan](#pengumpulan)
   - [Referensi](#referensi)
@@ -43,10 +42,6 @@ kemarin. Cukup copy folder T6 ke dalam folder T7 sebelum mulai.
 CSG atau *Constructive Solid Geometry* merupakan sebuah tool dalam Godot Engine
  untuk menggabungkan bentuk-bentuk 3D dasar/primitif seperti *Box* atau *Sphere* 
  agar tercipta suatu bentuk kompleks.
- 
-CSG biasa digunakan untuk prototyping level 3D. Jika anda ingin membuat level 3D
-yang sudah production-quality, nantinya aset yang sudah dibuat dengan CSG bisa diganti
-dengan model 3D yang dibuat dari 3DMax, Blender, atau software 3D modelling sejenisnya.
 
 ### Fitur CSG
 
@@ -124,8 +119,8 @@ Dalam ```lamp``` masukkan child note untuk membentuk bagian lampu.
 - Buat ```CSGPolygon``` dengan memilih Mode *Spin* pada tab Inspector, lalu ubah proyeksi menjadi *Front View* dan atur
 Titik pada polygon hingga membentuk trapesium untuk membentuk penutup lampu.
 
-![CSGPolygon Inspector](images/PolygonInspector.jpg)
-![CSGPolygon Trapezoid](images/PolygonTrapezoid.jpg)
+![CSGPolygon Inspector](images/PolygonInspector)
+![CSGPolygon Trapezoid](images/PolygonTrapezoid)
 
 Setelah jadi, atur ketiga child node sehingga membentuk sebuah lampu! Save lalu masukkan Scene tersebut ke dalam Scene
  World 1 dengan klik kanan pada Node World 1 pilih ```Instance Child Scene```.
@@ -153,7 +148,7 @@ Seperti yang sudah dipelajari pada Tutorial 4, sebuah level tidak lengkap tanpa 
 
 Misalkan kita ingin menambahkan halangan untuk player dapat menuju goal seperti field yang berlubang atau jurang yang hanya dapat dilewati menggunakan function jump yang telah anda buat pada tutorial 6.
 
-Buka Scene ```World 1```, lalu buat ```CSGCombiner``` baru dan centang ```Use Collision``` pada tab Inspector. Lalu masukkan Node ```Room 1``` ke dalam CSGCombiner yang telah dibuat. Tambahkan 2 ```CSGBox``` ke dalam CSGCombiner masing-masing akan menjadi room yang baru dan lubang. Atur sedemikian rupa menggunakan operation ```Union``` untuk membuat ruang baru dan lubang.
+Buka Scene ```World 1```, lalu buat ```CSGCombiner``` baru dan centang ```Use Collision``` pada tab Inspector. Lalu masukkan Node ```Room 1``` ke dalam CSGCombiner yang telah dibuat. Tambahkan 2 ```CSGBox``` ke calam CSGCombiner masing-masing akan menjadi room yang baru dan lubang. Atur sedemikian rupa menggunakan operation ```Union``` untuk membuat ruang baru dan lubang.
 
 ![Obstacle Mapping](images/ObstacleMap.jpg)
 ![Obstacle](images/obstacle.jpg)
