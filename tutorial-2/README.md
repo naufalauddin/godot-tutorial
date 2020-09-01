@@ -15,7 +15,7 @@ Sekadar mengingatkan, pastikan kamu:
 
 Apabila kamu belum membentuk atau bergabung ke kelompok tugas proyek akhir,
 jangan lupa untuk bergabung atau membentuk kelompok sebelum tanggal
-**16 September 2019**.
+**28 September 2020**.
 
 ## Daftar Isi
 
@@ -333,11 +333,11 @@ tutorial ini di repositori milik pribadi. Apabila kamu mengerjakan latihan
 ekstra, pastikan _scene_ pesawat dan landasan baru juga sudah masuk ke dalam
 Git dan telah di-_push_.
 
-Tenggat waktu pengumpulan adalah **Sabtu, 14 September 2019, pukul 21:00**.
+Tenggat waktu pengumpulan adalah **Jumat, 25 September 2020, pukul 21:00**.
 
 ## Referensi
 
 - [Introduction to Godot's Editor](https://godot.readthedocs.io/en/3.1/getting_started/step_by_step/intro_to_the_editor_interface.html)
 - [Scenes and Nodes](https://godot.readthedocs.io/en/3.1/getting_started/step_by_step/scenes_and_nodes.html#introduction)
 - Materi tutorial pengenalan Godot Engine, kuliah Game Development semester
-  gasal 2018/2019 Fakultas Ilmu Komputer Universitas Indonesia.
+  gasal 2020/2021 Fakultas Ilmu Komputer Universitas Indonesia.
