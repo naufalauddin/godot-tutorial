@@ -6,7 +6,6 @@
 extents = Vector2( 50.0055, 38.7128 )
 
 [node name="BlueShip" type="RigidBody2D"]
-mass = 20.46
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )

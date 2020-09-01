@@ -14,5 +14,4 @@ position = Vector2( 35, 565 )
 position = Vector2( 70, 0 )
 
 [node name="BlueShip" parent="." instance=ExtResource( 2 )]
-position = Vector2( 58.7874, 55.9098 )
-mass = 3.0
+position = Vector2( 72.7009, 421.901 )
