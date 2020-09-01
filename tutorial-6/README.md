@@ -297,10 +297,12 @@ tutorial ini di repositori milik pribadi. **Jangan _push_ atau membuat Merge
 Request ke repositori _upstream_ materi tutorial kecuali jika kamu ingin
 kontribusi materi atau memperbaiki materi yang sudah dipublikasikan!**
 
-Tenggat waktu pengumpulan adalah **Sabtu, 9 November 2019, pukul 21:00**.
+Tenggat waktu pengumpulan adalah **Jumat, 27 November 2020, pukul 21:00**.
 
 ## Referensi
 
 - [Godot 3D Tutorial](http://docs.godotengine.org/en/3.1/tutorials/3d/index.html)
 - [Godot FPS Tutorial](http://docs.godotengine.org/en/3.1/tutorials/3d/fps_tutorial/index.html)
 - [Kenney 3D Assets](https://www.kenney.nl/assets?q=3d)
+- Materi tutorial pengenalan Godot Engine, kuliah Game Development semester
+  gasal 2020/2021 Fakultas Ilmu Komputer Universitas Indonesia.
