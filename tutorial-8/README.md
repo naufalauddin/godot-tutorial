@@ -239,10 +239,12 @@ tutorial ini di repositori milik pribadi. **Jangan _push_ atau membuat Merge
 Request ke repositori _upstream_ materi tutorial kecuali jika kamu ingin
 kontribusi materi atau memperbaiki materi yang sudah dipublikasikan!**
 
-Tenggat waktu pengumpulan adalah **Sabtu, 30 November 2019, pukul 21:00**.
+Tenggat waktu pengumpulan adalah **Jumat, 18 Desember 2020, pukul 21:00**.
 
 ## Referensi
 
 - [Particle System 2D](https://docs.godotengine.org/en/3.1/tutorials/2d/particle_systems_2d.html)
 - [Particles2D](https://docs.godotengine.org/en/3.1/classes/class_particles2d.html)
 - [Kenney Assets](https://www.kenney.nl/assets/platformer-pack-redux)
+- Materi tutorial pengenalan Godot Engine, kuliah Game Development semester
+  gasal 2020/2021 Fakultas Ilmu Komputer Universitas Indonesia.
