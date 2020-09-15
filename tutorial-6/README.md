@@ -1,282 +1,307 @@
-# Tutorial 6 - Basic 3D Game Mechanics
+# Tutorial 6 - Menu and In-Game Graphical User Interface
 
-Selamat datang pada tutorial keenam kuliah Game Development. Pada tutorial
-kali ini, kamu akan mempelajari cara membuat game dalam bentuk tiga dimensi (3D).
-Di akhir tutorial ini, diharapkan kamu paham cara menggunakan *node* 3D,
-penggunaan matematika untuk mengembangkan game 3D,
-dan cara berinteraksi dengan objek lain dengan *raycast*.
+Selamat datang pada tutorial kelima kuliah Game Development. Pada tutorial
+kali ini, kamu akan mempelajari cara membuat _menu screen_, _game over screen_,
+dan _in-game GUI_. Di akhir tutorial ini, diharapkan kamu paham cara menggunakan
+_Container_, _Label_, _Button_, serta unsur-unsur lain untuk menyusun menu dalam
+_game_.
 
 ## Daftar isi
 
-- [Tutorial 6 - Basic 3D Game Mechanics](#tutorial-6---basic-3d-game-mechanics)
-  - [Daftar isi](#daftar-isi)
+- [Tutorial 6 - Menu and In-Game Graphical User Interface](#tutorial-6---menu-and-in-game-graphical-user-interface)
+  - [Daftar Isi](#daftar-isi)
   - [Pengantar](#pengantar)
-    - [2D vs 3D](#2d-vs-3d)
-    - [Objectives & Prerequisites](#objectives--prerequisites)
-  - [Basic 3D Plane Movement](#basic-3d-plane-movement)
-  - [Object Interaction](#object-interaction)
+    - [Let The Games Begin](#let-the-games-begin)
+    - [Menu Screens, Game Over Screens, Game GUI](#menu-screens-game-over-screens-game-gui)
+  - [Creating a Main Menu Screen](#creating-a-main-menu-screen)
+    - [Visualization](#visualization)
+    - [Containers, Labels, and Buttons](#containers-labels-buttons)
+    - [Creating Custom Fonts](#creating-custom-fonts)
+    - [Clickable Menu](#clickable-menu)
+  - [Creating a Life Counter](#creating-a-life-counter)
+    - [Global Variables](#global-variables)
+    - [Adding the GUI](#adding-the-gui)
+  - [Creating a Game Over Screen](#creating-a-game-over-screen)
+    - [Using Background Coloring](#using-background-coloring)
   - [Bonus To Do](#bonus-to-do)
-  - [Instruksi Pengerjaan](#instruksi-pengerjaan)
+  - [Instruksi Pengerjaan](#Instruksi-Pengerjaan)
   - [Skema Penilaian](#skema-penilaian)
   - [Pengumpulan](#pengumpulan)
   - [Referensi](#referensi)
 
+
 ## Pengantar
 
-> Note: Tersedia template game untuk tutorial ini, namun tidak diwajibkan untuk menggunakannya.
+> IMPORTANT: Untuk tutorial kali ini, diperbolehkan menggunakan template game yang telah disediakan **ATAU** melanjutkan dari yang sudah dikerjakan di tutorial 4 kemarin. Jika ingin melanjutkan proyek kemarin, cukup mengcopy isi folder T4 kamu ke dalam folder T6 sebelum mulai.
 
-### 2D vs 3D
+### Let The Games Begin
 
-Pada tutorial yang dilakukan sebelum masa UTS, kita sudah membuat game dua dimensi (2D)
-dimana pemain dapat bergerak pada ruang dua dimensi. Pemain dapat bergerak ke atas,
-bawah, kiri, dan kanan. Pada game 3D, terdapat sumbu tambahan pada ruang koordinat,
-yaitu sumbu Z yang memberikan unsur kedalaman dan volume. Hal ini menyebabkan pengembangan
-game 3D agak berbeda dengan 2D. Menggambar objek tidak menggunakan *sprite*, tetapi menggunakan
-*tool* 3D khusus, yang kemudian di-*export* ke sebuah format agar dapat di-*import* ke Godot.
-*Physics* juga berbeda dalam penggunaannya karena menggunakan vektor 3D.
+Saat kamu pertama kali memulai suatu game, apa yang pertama kali muncul? Logo
+perusahaan pembuat game tersebut? Logo [Bushimo](https://bushiroad.com/)?
+Tentunya semua game ada yang namanya _main-menu_. _Main Menu_ adalah layar
+utama saat kita memulai bermain game. Biasanya terdapat tombol untuk memulai
+permainan pada menu utama ini. Selain menu utama, di dalam game juga dapat
+menampilkan informasi yang terkait dengan kondisi permainan sekarang. Itu yang
+dinamakan game GUI (Graphical User Interface). GUI dapat menampilkan banyak hal,
+misal sisa nyawa pemain, total jumlah uang pemain, dan lain-lain. Kemudian yang
+tidak kalah penting adalah tampilan saat pemain kalah atau gagal, yakni
+_game over screen_.
 
-Berikut adalah contoh perbedaan game 2D dan 3D.
+Pada tutorial sebelumnya kita sudah berhasil membuat game platformer 2D yang cukup dasar. Namun saat menjalankan project, scene yang dijalankan langsung level 1. Tidak ada menu yang muncul terlebih dahulu. 
 
-![Risk of Rain](images/riskofrain.jpg)
-![Risk of Rain 2](images/riskofrain2.jpg)
+### Menu Screens, Game Over Screens, Game GUI
 
-> Risk of Rain (atas) dan Risk of Rain 2 (bawah)
+Berikut adalah contoh Menu Screen, Game Over Screen, dan GUI pada beberapa
+game populer:
 
-### Objectives & Prerequisites
+![The Legend of Zelda NES Main Menu](images/zeldamenu.jpg)
+![Undertale Game Over Screen](images/undertaledead.jpg)
+![Shovel Knight GUI](images/ShovelKnight.png)
 
-Pada tutorial ini kita akan membuat sebuah game *first-person* dimana pemain dapat bergerak,
-melompat, dan berinteraksi dengan objek.
+Pada tutorial ini kita akan melakukan hal berikut:
 
-Dikarenakan pengembangan game 3D akan berbeda dengan 2D, perlu diketahui bahwa beberapa *node* yang sebelumnya
-digunakan pada pengembangan game 2D tidak akan bekerja pada space 3D, sehingga kalian harus menggunakan
-*node* yang dapat bekerja pada space 3D. Selain itu, kalian juga harus me-*review* kembali dasar-dasar
-pelajaran Aljabar Linear dan Fisika Dasar karena *physics* pada space 3D lebih kompleks dibandingkan
-dengan pada space 2D. Terakhir, terdapat koordinat baru, yaitu koordinat Z, yang digunakan untuk
-menunjukkan arah depan/belakang.
+- Membuat Main Menu Screen
+- Membuat Life Counter
+- Membuat Game Over Screen
 
-## Basic 3D Plane Movement
+## Creating a Main Menu Screen
 
-Kita ingin membuat sebuah karakter yang dikendalikan oleh pemain di dunia 3D. Untuk itu,
-kita akan membuat sebuah objek ```KinematicBody``` (mirip dengan ```Kinematic2D```) yang dapat bergerak ke semua arah dan dapat melompat.
+### Visualization
 
-Buat sebuah *Scene* baru, tambahkan *node* ```KinematicBody```, rename menjadi *Player*
-dan tambahkan ```MeshInstance``` dan ```CollisionShape``` sebagai *child node* dari *node*
-*Player*. Tambahkan satu lagi *child node* berupa ```Spatial```, rename menjadi *Head*, dan
-tambahkan ```Camera``` sebagai *child node* dari *Head*.
+Untuk menghasilkan sebuah UI yang baik, sebaiknya kita membuat sebuah mockup terlebih dahulu. Apa saja yang ingin kita tampilkan di menu utama, dan posisi segala hal yang ingin kita tampilkan. Visualisasi boleh digambar di kertas, dan tidak harus bagus-bagus. Cukup untuk memberikan gambaran kasar apa yang ingin kita buat. Berikut adalah contoh visualisasi main menu: 
 
-![Susunan awal Player](images/playertreeworaycast.jpg)
+![My Visualization of a Menu Screen](images/Visualization.png)
 
-Pada node ```CollisionShape```, pada tab *Inspector*, berikan sebuah ```Shape``` yaitu ```CapsuleShape``` untuk
-memberi *collision* pada pemain, lalu putar sebesar 90 derajat pada sumbu x.
+### Containers, Labels, and Buttons
 
-![Collision Shape](images/collisionshape.jpg)
+Salah satu cara untuk menyusun sebuah menu dengan rapi adalah menggunakan containers. Beberapa container yang terdapat di Godot Engine antara lain:
+- ```MarginContainer``` untuk menyusun elemen dengan padding
+- ```HBoxContainer``` untuk menyusun elemen secara horizontal
+- ```VBoxContainer``` untuk menyusun elemen secara vertikal
+- ```CenterContainer``` untuk menyusun elemen secara centered
 
-Pada node ```MeshInstance```, pada tab *Inspector*, berikan *mesh* dengan bentuk ```CapsuleMesh``` untuk
-memberi wujud pada pemain, lalu putar sebesar 90 derajat pada sumbu x.
+Sesuai dengan visualisasi yang telah dilakukan di atas, kita dapat menyusun main menu ini dengan susunan container sebagai berikut:
+Kotak terbesar seukuran _game window_, dan terdapat padding di bagian ujung window. Oleh karena itu kita menggunakan parent ```MarginContainer```. Kemudian layar dibagi dua kiri kanan, maka menggunakan ```HBoxContainer```. Di bagian kiri ada judul dan button, maka ada ```VBoxContainer```. Button sendiri akan kita susun dengan ```VBoxContainer``` juga. Sedangkan sebelah kanan cukup kita berikan ```CenterContainer``` untuk gambar.
 
-![Mesh Instance](images/meshinstance.jpg)
+![My Visualiation of Menu Screen Containers](images/VisualizationContainers.png)
 
-Pindahkan/translasikan *node Head* agar berada di ujung atas objek.
+> Note: Kamu tidak harus mengikuti struktur dan layout persis sama seperti di atas. Bahkan diperbolehkan jika kamu tidak ingin menggunakan container sama sekali untuk menu utama. Namun container sangat membantu untuk visualisasi dan kerapihan.
 
-Agar pemain dapat bergerak, tambahkan *script* pada *node Player* dengan isi sebagai berikut:
+Mulai dengan membuat scene baru. Karena root node UI yang kita inginkan adalah container paling luar, atur root node menjadi sebuah ```MarginContainer```. Jangan lupa save scene tersebut, berikan nama ```MainMenu.tscn```.
+
+![New Margin Container for Main Menu](images/MarginContainer.PNG)
+
+Pada tab Inspector, atur ```Custom Constants``` sebagai berikut:
+
+![Edit Custom Constants](images/CustomConstants.PNG)
+
+Kemudian pada Viewport, tekan menu ```Layout``` dan pilih opsi ```Full Rect```. Ini dilakukan agar ukuran container menyesuai ukuran window.
+
+![Full Rect](images/FullRect.png)
+
+Sekarang kita masukkan elemen text dan gambar ke dalam ```MarginContainer```. Untuk text menggunakan node ```Label```, dan untuk gambar dapat menggunakan node ```TextureRect```. Untuk contoh ini ada dua tombol, "New Game" dan "Stage Select", yang akan diimplementasikan menggunakan node ```LinkButton```. 
+
+Untuk menambahkan text pada ```Label``` atau ```LinkButton``` cukup menulis di tab Inspector bagian ```Text```. 
+Untuk menambahkan gambar kepada ```TextureRect```, sama seperti menambahkan texture di ```Sprite``` yaitu di tab Inspector bagian ```Texture```.
+Saat selesai, mungkin struktur scene dan workspace kamu akan terlihat seperti ini.
+
+![Main Menu but no Font](images/MainMenuBeforeFont.PNG)
+
+You may have noticed: Tulisan pada ```Label``` dan ```LinkButton``` kecil sekali, dan di tab Inspector tidak ada pilihan ukuran atau jenis font. Ini dikarenakan pada Godot Engine **tidak ada fitur untuk mengubah ukuran dan jenis font secara langsung**. _So what do we do?_
+
+### Creating Custom Fonts
+
+Pada Godot Game Engine, untuk mengatur font dan ukuran sebuah tulisan dalam sebuah node, misal node ```Label```, kita harus menggunakan objek custom font. Untuk tutorial ini, kita akan membuat ```DynamicFont``` menggunakan font dengan ekstensi ```.ttf```. Sudah disediakan beberapa file ```.ttf``` di folder Assets/Fonts/Raw (jika ingin mencari font sendiri dipersilakan, bisa melalui website font gratis seperti [di sini](https://www.1001fonts.com/free-fonts-for-commercial-use.html).
+
+Pertama, tekan tombol create resource pada tab Inspector. Kemudian buat sebuah ```DynamicFont```.
+
+![Create Resource 1](images/CreateResource.png)
+![Create Resource 2](images/CreateResource2.PNG)
+
+Masih pada tab Inspector, cari pilihan ```Font Data```, lalu tekan load dan cari file ```.ttf``` yang ingin digunakan. Setelah itu, kamu dapat mengatur size sesuka hati pada opsi ```Size```. Tekan save, dan simpan sebagai file ```.tres``` di folder Assets/Fonts. Selamat! Anda telah berhasil membuat sebuah ```DynamicFont```.
+
+![Create Resource 3](images/CreateResource3.png)
+
+Untuk menggunakan font tersebut, cari opsi ```Custom Font``` di tab Inspector pada node ```Label``` atau ```LinkButton```, lalu load resource yang baru saja dibuat. **IMPORTANT:** Seperti yang telah dijelaskan sebelumnya, tidak ada cara mengatur ukuran dan jenis font secara langsung, jadi jika ingin membuat font dengan tipe atau ukuran yang berbeda, harus membuat ```DynamicFont``` yang berbeda.
+
+Setelah menggunakan ```DynamicFont``` pada judul dan tombol kita, hasilnya terlihat seperti ini (tombol new game dan stage select diberi warna merah menggunakan ```Custom Colors``` pada tab Inspector):
+
+![Main Menu After Custom Font](images/MainMenuAfterFont.PNG)
+
+Masih belum terlihat rapi. Sekarang kita tambahkan container sesuai visualisasi di atas tadi. Struktur node dan workspace anda harusnya menjadi lebih rapi:
+
+![Main Menu After Containers](images/MainMenuAfterContainer.PNG)
+
+Agar judul dan button tidak terlalu berhimpitan, ubah ```Margin``` pada ```VBoxContainer``` parent. Kemudian, ubah ```Alignment``` , pilih opsi ```Expand``` pada vertical di ```Size Flags```, lalu atur ```Separation``` pada ```Custom Constants```.
+
+![Fix Bottom Margin](images/BottomMargin.png)
+
+![Fixing the Buttons](images/VBoxFixing.PNG)
+
+Selamat! Menu Screen kamu sudah terlihat cukup rapi!
+
+![Main Menu Not Clickable Yet](images/MainMenuNoClick.gif)
+
+ Tapi masih belum clickable tentunya. Bagaimana caranya agar saat kita menekan tombol "New Game" dia akan melempar kita ke level 1?
+
+### Clickable Menu
+
+Kita ingin agar saat tombol "New Game" ditekan, game akan menjalankan scene level pertama. Kemarin kita sudah belajar menggunakan _Signals_. Sekarang kita akan menggunakan _Signal_ lagi yaitu ```pressed()```.
+
+Gunakan cuplikan script berikut pada script ```LinkButton```
+```
+extends LinkButton
+
+export(String) var scene_to_load
+
+func _on_New_Game_pressed():
+	get_tree().change_scene(str("res://Scenes/" + scene_to_load + ".tscn"))
 
 ```
-extends KinematicBody
 
-export var speed = 10
-export var acceleration = 5
-export var gravity = 0.98
-export var jump_power = 30
-export var mouse_sensitivity = 0.3
+Kemudian isi variabel ```scene_to_load``` pada tab Inspector dengan value "Level 1"
 
-onready var head = $Head
+![Load Level 1](images/SceneToLoad.png)
 
-var velocity = Vector3()
+Berhasil! Sekarang tombol "New Game" kamu akan langsung membawa pemain ke level 1
 
-func _ready():
-    Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+![Main Menu New Game Complete](images/MainMenu.gif)
 
-func _input(event):
-    pass
+_"Mengapa saat saya tekan play (F5) yang jalan pertama bukan main menu?"_ Karena ```MainMenu.tscn``` belum di-set sebagai Main Scene. Main Scene dapat diubah di Project Settings -> Application -> Run -> Main Scene.
 
-func _process(delta):
-    if Input.is_action_just_pressed("ui_cancel"):
-        Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+![Change Main Scene](images/SetMainScene.png)
 
-func _physics_process(delta):
-    var head_basis = head.get_global_transform().basis
-    
-    var movement_vector = Vector3()
-    if Input.is_action_pressed("movement_forward"):
-        movement_vector -= head_basis.z
-    if Input.is_action_pressed("movement_backward"):
-        movement_vector += head_basis.z
-    if Input.is_action_pressed("movement_left"):
-        movement_vector -= head_basis.x
-    if Input.is_action_pressed("movement_right"):
-        movement_vector += head_basis.x
-    
-    movement_vector = movement_vector.normalized()
-    
-    velocity = velocity.linear_interpolate(movement_vector * speed, acceleration * delta)
-    velocity.y -= gravity
-    
-    if Input.is_action_just_pressed("jump") and is_on_floor():
-        velocity.y += jump_power
-    
-    velocity = move_and_slide(velocity, Vector3.UP)
-```
+## Creating a Life Counter 
 
-Pada *Project* > *Project Settings*, pada tab *Input Map*, tambahkan action `movement_forward`,
-`movement_backward`, `movement_left`, `movement_right`, `jump` dan `interact` sebagai berikut
-(akan digunakan nantinya):
+Kemarin kita sudah membuat kondisi dimana saat player jatuh, scene akan di reload dengan player kembali ke tempat semula. Namun tidak ada penalti sama sekali untuk jatuh. Sekarang kita akan mencoba membuat kondisi dimana setiap kali player jatuh, akan kehilangan satu nyawa. Saat sudah tidak ada nyawa lagi, maka terjadi **GAME OVER**.
 
-![Input](images/input.jpg)
+### Global Variables
 
-Perhatikan bahwa:
+Jika kamu pernah menyentuh bahasa pemrograman apapun (obviously), pasti sudah familiar dengan yang namanya _Global Variable_. _Global Variable_ adalah sebuah variabel yang terlihat (visible) oleh seluruh program. Kita menggunakan _Global Variable_ untuk mendefinisikan nyawa player, yang akan _persist_ walaupun scene baru dipanggil atau diulang-ulang. Variabel ini dapat dipanggil dari script manapun.
 
-1. ```head_basis``` merupakan vektor yang menunjukkan arah dari kepala pemain, sehingga jika
-   menekan input untuk menggerakan pemain, ```movement_vector``` akan berisi
-   arah sumbu x dari kepala pemain ketika bergerak ke kiri atau kanan, dan sumbu z dari kepala pemain
-   ketika bergerak ke depan atau belakang.
-2. Kita mengubah ```movement_vector``` menjadi ```movement_vector.normalized()```, karena
-   jika diberikan input pada dua arah seperti ke depan dan ke kiri, maka pemain tidak akan
-   maju dua kali lebih cepat.
-3. Fungsi ```linear_interpolate``` berguna agar pergerakan pemain mulus sesuai dengan
-   *acceleration* dari pemain ketika menekan input.
-4. Fungsi ```move_and_slide``` berfungsi untuk menggerakan pemain.
+Pertama, klik kanan folder Scripts lalu tekan New Script...
 
-Tambahkan *scene Player* ke *scene Level*, lalu coba jalankan *scene* tersebut. Pemain sudah dapat
-bergerak, namun pemain tidak dapat menggerakan kamera menggunakan *mouse* untuk menghadap arah lain. Untuk itu,
-tambahkan kode berikut:
+![Create New Script](images/NewScript.PNG)
 
-```
-...
-onready var head = $Head
-onready var camera = $Head/Camera
-
-var velocity = Vector3()
-var camera_x_rotation = 0
-
-...
-
-func _input(event):
-	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-    head.rotate_y(deg2rad(-event.relative.x * mouse_sensitivity))
-
-    var x_delta = event.relative.y * mouse_sensitivity
-    if camera_x_rotation + x_delta > -90 and camera_x_rotation + x_delta < 90:
-    	camera.rotate_x(deg2rad(-x_delta))
-    	camera_x_rotation += x_delta
-...
-```
-
-Kode tersebut berguna untuk merotasikan *node Head* ketika mouse bergerak, dan juga mencegah rotasi melebihi
-90 derajat ketika melihat ke atas atau bawah.
-
-## Object Interaction
-
-Pada *scene Level*, terdapat sebuah node *switch* yang digunakan untuk menyalakan atau mematikan lampu *OmniLight*.
-Agar objek *switch* tersebut dapat dilakukan sebuah interaksi (seperti mematikan dan menyalakan), tambahkan 2 buah script berikut:
-
-> Interactable.gd
+Beri nama script tersebut ```global.gd``` lalu isi dengan script berikut:
 
 ```
 extends Node
 
-class_name Interactable
-
-func interact():
-    pass
+var lives = 3
 ```
 
-> Switch.gd (attach script ini pada node StaticBody di Switch)
+Pada Project Settings, cari tab Autoload, lalu tambahkan script ```global.gd``` (tekan icon folder di sebelah tulisan Node Name lalu cari scriptnya). Setelah ditambahkan, akan muncul di list. Pastikan kolom ```Singleton``` dalam kondisi ```enabled```.
+
+![Set Global Autoload](images/Autoload.PNG)
+
+Sekarang kita punya variable nyawa yang dapat diakses kapan saja. Mari kita tampilkan menggunakan label.
+
+> Side note buat yang bertanya mengapa menggunakan global variable untuk contoh ini, alasannya karena tiap kali reload scene, player juga ikut reload. Maka ```lives``` disimpan dalam global agar tidak reset saat scene reload.
+
+### Adding the GUI
+
+Buat sebuah scene baru dan beri nama ```Life Counter.tscn``` dengan root node sebuah ```MarginContainer```. Buat sebuah child node ```Label```, lalu berikan script. Jangan lupa berikan **custom font** kepada node ```Label```.
 
 ```
-extends Interactable
-
-export var light : NodePath
-export var on_by_default = true
-export var energy_when_on = 1
-export var energy_when_off = 0
-
-onready var light_node = get_node(light)
-
-var on = on_by_default
-
-func _ready():
-    light_node.set_param(Light.PARAM_ENERGY, energy_when_on)
-
-func interact():
-    on = !on
-    light_node.set_param(Light.PARAM_ENERGY, energy_when_on if on else energy_when_off)
-```
-
-Perhatikan bahwa kita meng*extend class* ```Interactable``` pada *Switch*, agar kode dapat digunakan kembali
-jika ingin membuat objek ```Interactable``` lain.
-
-Pada bagian *inspector*, attach *OmniLight* sebagai isi dari variable *Light*, seperti berikut:
-
-![Static Body](images/staticbody.jpg)
-
-Agar pemain dapat berinteraksi dengan objek lain, kita dapat menggunakan *node* ```RayCast```. ```RayCast```
-merepresentasikan sebuah garis dari suatu titik ke titik lain, dan menkueri objek terdekat yang
-ditemuinya. Tambahkan *node* ```RayCast``` sebagai *child* dari *head* pemain. Pastikan
-```RayCast``` menghadap arah yang sama dengan ```Camera``` dengan mengatur nilai *cast to* di *inspector*.
-
-![Susunan Player](images/playertree.jpg)
-
-Pada *node* ```RayCast```, tambahkan *script* sebagai berikut:
-
-```
-extends RayCast
-
-var current_collider
-
-func _ready():
-    pass
+extends Label
 
 func _process(delta):
-    var collider = get_collider()
-    
-    if is_colliding() and collider is Interactable:
-        if Input.is_action_just_pressed("interact"):
-            collider.interact()
+	self.text = "Lives : " + str(global.lives)
 ```
 
-Fungsi ini mengecek jika ```RayCast``` menyentuh sebuah objek lain yang berupa *Interactable*,
-dan pemain dapat menekan tombol (misalnya E) untuk berinteraksi dengan objek tersebut. Dalam
-kasus ini, berinteraksi dengan *switch* akan mematikan atau menyalakan lampu.
+Struktur akan terlihat seperti ini (```MarginContainer``` di rename menjadi "GUI"):
 
-Selamat, kamu sudah menyelesaikan tutorial ini!
+![GUI Structure](images/GUI.PNG)
+
+Pada ```Level 1.tscn```, tambahkan sebuah ```CanvasLayer``` node sebagai child node dari node utama. ```CanvasLayer``` merupakan node yang membuat sebuah layer 2D tersendiri untuk seluruh child nya. ```CanvasLayer``` berguna untuk membuat background untuk level, atau user interface seperti yang akan kita buat sekarang.
+
+Tambahkan ```Life Counter.tscn``` yang tadi kita buat sebagai child node dari ```CanvasLayer```. Struktur ```Level 1.tscn``` anda akan terlihat seperti ini:
+
+![Level with GUI](images/LevelStructure.PNG)
+
+Coba jalankan ```Level 1.tscn``` kamu. Sekarang sudah muncul tampilan life counter di kiri atas yang mengikuti bentuk window yang ada.
+
+![Level 1 No Life Loss](images/Level1NoLifeLoss.gif)
+
+Namun nyawa player belum berkurang saat mati. Waktunya melakukan sedikit scripting!
+
+Ubah script di ```Area Trigger.gd``` dengan kode berikut:
+
+```
+extends Area2D
+
+export (String) var sceneName = "Level 1"
+
+func _on_Area_Trigger_body_entered(body):
+	var current_scene = get_tree().get_current_scene().get_name()
+	if body.get_name() == "Player":
+		if current_scene == sceneName:
+			global.lives -=1
+		if (global.lives == 0):
+			pass
+		else:
+			get_tree().change_scene(str("res://Scenes/" + sceneName + ".tscn"))
+```
+
+> _What's happening above?_ Karena transisi dari level 1 ke 2 menggunakan function yang sama, pertama kita periksa terlebih dahulu scene yang memanggil fungsi apakah sama dengan target scene (maka reload). Jika iya, nyawa berkurang satu. Baris ```pass``` di kondisi ```global.lives``` == 0 akan kita isi sebentar lagi (_you could probably already guess what goes there though_).
+
+![Level 1 Life Loss](images/Level1LifeLoss.gif)
+
+Sekarang nyawa player berkurang saat mati. Namun kita belum memasukkan kondisi dimana nyawa player 0, yaitu **GAME OVER**. 
+
+## Creating a Game Over Screen
+
+### Using Background Coloring
+
+Untuk membuat Game Over screen, step by step nya sama dengan membuat Main Menu. Visualisasi game over saya adalah tulisan game over dengan warna latar merah. Jika ingin menambahkan warna latar, kita dapat menggunakan node ```ColorRect```.
+
+Buatlah sebuah scene baru, beri nama ```Game Over.tscn```, lalu set sebuah ```ColorRect``` sebagai root node. Mirip seperti ```MarginContainer``` tadi, agar kotak mengikuti ukuran window, pada Viewport tekan menu ```Layout``` dan pilih ```Full Rect```. Ubah warna sesuka hati.
+
+![Setting Up Background Color](images/BackgroundColor.png)
+
+Tambahkan label bertuliskan "GAME OVER", dengan DynamicFont yang menurut kamu cocok, kemudian atur posisinya. Selesailah Game Over screen kita!
+
+![Game Over Screen Finished](images/GameOverDesu.png)
+
+Sekarang bagaimana caranya agar saat nyawa pemain 0 akan menampilkan layar ini? Pada ```Area Trigger.gd``` ubah script ```pass``` menjadi:
+
+```
+get_tree().change_scene(str("res://Scenes/Game Over.tscn"))
+```
+
+Berhasil! Sekarang saat player nyawanya habis, GAME OVER screen akan muncul.
+
+![Game Over Desu](images/GameOverDesu.gif)
+
+Selamat, tutorial ini sudah selesai!
 
 ## Bonus To Do
 
-Apabila masih ada waktu atau ingin lanjut berlatih mandiri, silakan baca referensi yang tersedia untuk belajar mengimplementasikan mekanik tambahan.
-Tidak ada kriteria khusus untuk ini, kamu bebas menambahkan apapun yang kamu suka. Beberapa contoh yang dapat diimplementasikan:
+Apabila masih ada waktu atau ingin lanjut berlatih mandiri, silakan baca
+referensi yang tersedia untuk belajar mengimplementasikan fitur tambahan.
+Tidak ada kriteria khusus untuk ini, kamu bebas menambahkan apapun yang kamu
+suka. Beberapa contoh yang bisa dikerjakan:
 
-- Item pickup
-- Sprinting
-- Crouching
-- Estetika (User Interface dan penggunaan asset 3D)
-- dll.
+- Button pada Game Over Screen untuk kembali ke Main Menu
+- Fitur Select Stage (yang konon sudah ada _button_-nya di main menu namun
+  tidak dihiraukan)
+- Transition screen antara stage 1 dan stage 2
+- dll. _Get creative!_
 
 Jika mengerjakan fitur tambahan, buat file baru bernama `T6_[NPM].md` dimana
-`[NPM]` adalah NPM kamu (misal: `T6_1506757913`) di folder yang sama dengan
+`[NPM]` adalah NPM kamu (misal: `t6_1506757913`) di folder yang sama dengan
 [`README.md`](README.md) ini. Tulis teks menggunakan format [Markdown](https://docs.gitlab.com/ee/user/markdown.html).
 
 ## Instruksi Pengerjaan
 
-1. Dalam repositori pribadi kamu, silakan sinkronisasi _branch_ `master` dengan
-   repositori _upstream_. Instruksi lebih lanjut bisa dibaca [disini](https://help.github.com/en/articles/syncing-a-fork).
-2. Jika terdapat _conflict_, mohon diselesaikan secara damai. Jika tidak yakin
-   bagaimana caranya, silakan ambil mata kuliah *Advanced Programming* atau
-   baca [ini](https://help.github.com/en/articles/resolving-a-merge-conflict-using-the-command-line).
-3. Setelah semua selesai, buat _branch_ baru dari _branch_ `master` dengan nama
-   `tutorial-x` dimana `x` adalah nomor tutorial (misal: `tutorial-6`).
-4. Ganti _current branch_ menjadi `tutorial-x` tersebut, silakan kerjakan
-   tutorial di dalam _branch_ yang bersangkutan. Setiap _branch_ tutorial
-   **tidak perlu** di _merge_ ke _branch_ `master`.
+1. Dalam repositori pribadi kamu, silakan sinkronisasi _branch_ ```master``` dengan repositori _upstream_.
+   Instruksi lebih lanjut bisa dibaca [disini](https://help.github.com/en/articles/syncing-a-fork).
+2. Jika terdapat _conflict_, mohon diselesaikan secara damai.
+   Jika tidak yakin bagaimana caranya, silakan ambil mata kuliah *Advanced Programming* atau baca [ini](https://help.github.com/en/articles/resolving-a-merge-conflict-using-the-command-line).
+3. Setelah semua selesai, buat _branch_ baru dari _branch_ ```master``` dengan nama ```tutorial-x``` dimana ```x``` adalah nomor tutorial (misal: tutorial-6).
+4. Ganti _current branch_ menjadi ```tutorial-x``` tersebut, silakan kerjakan tutorial di dalam _branch_ yang bersangkutan.
+   Setiap _branch_ tutorial **tidak perlu** di _merge_ ke _branch_ ```master```.
 
 ## Skema Penilaian
 
@@ -297,10 +322,12 @@ tutorial ini di repositori milik pribadi. **Jangan _push_ atau membuat Merge
 Request ke repositori _upstream_ materi tutorial kecuali jika kamu ingin
 kontribusi materi atau memperbaiki materi yang sudah dipublikasikan!**
 
-Tenggat waktu pengumpulan adalah **Sabtu, 9 November 2019, pukul 21:00**.
+Tenggat waktu pengumpulan adalah **Jumat, 23 Oktober 2020, pukul 21:00**.
 
 ## Referensi
 
-- [Godot 3D Tutorial](http://docs.godotengine.org/en/3.1/tutorials/3d/index.html)
-- [Godot FPS Tutorial](http://docs.godotengine.org/en/3.1/tutorials/3d/fps_tutorial/index.html)
-- [Kenney 3D Assets](https://www.kenney.nl/assets?q=3d)
+- [Main Menu](https://docs.godotengine.org/en/3.1/getting_started/step_by_step/ui_main_menu.html)
+- [GUI Design](https://docs.godotengine.org/en/3.1/getting_started/step_by_step/ui_game_user_interface.html)
+- [Kenney Assets](https://www.kenney.nl/assets/platformer-pack-redux)
+- Materi tutorial pengenalan Godot Engine, kuliah Game Development semester
+  gasal 2020/2021 Fakultas Ilmu Komputer Universitas Indonesia.

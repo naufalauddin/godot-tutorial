@@ -316,7 +316,7 @@ tutorial ini di repositori milik pribadi. **Jangan _push_ atau membuat Merge
 Request ke repositori _upstream_ materi tutorial kecuali jika kamu ingin
 kontribusi materi atau memperbaiki materi yang sudah dipublikasikan!**
 
-Tenggat waktu pengumpulan adalah **Sabtu, 21 September 2019, pukul 21:00**.
+Tenggat waktu pengumpulan adalah **Jumat, 2 Oktober 2020, pukul 21:00**.
 
 ## Referensi
 
@@ -325,4 +325,4 @@ Tenggat waktu pengumpulan adalah **Sabtu, 21 September 2019, pukul 21:00**.
 - [2D Movement Overview](https://docs.godotengine.org/en/3.1/tutorials/2d/2d_movement.html)
 - [Kenney Assets](https://kenney.nl/assets/platformer-characters-1)
 - Materi tutorial pengenalan Godot Engine, kuliah Game Development semester
-  gasal 2018/2019 Fakultas Ilmu Komputer Universitas Indonesia.
+  gasal 2020/2021 Fakultas Ilmu Komputer Universitas Indonesia.

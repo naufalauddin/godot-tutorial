@@ -1,246 +1,282 @@
-# Tutorial 7 - Basic 3D Level Design
+# Tutorial 7 - Basic 3D Game Mechanics
 
-Selamat datang pada tutorial ketujuh kuliah Game Development. Pada tutorial
-kali ini, kamu akan mempelajari cara membuat 3D level sederhana menggunakan Godot Engine.
-Di akhir tutorial ini, diharapkan kamu paham dengan penggunaan CSG.
+Selamat datang pada tutorial keenam kuliah Game Development. Pada tutorial
+kali ini, kamu akan mempelajari cara membuat game dalam bentuk tiga dimensi (3D).
+Di akhir tutorial ini, diharapkan kamu paham cara menggunakan *node* 3D,
+penggunaan matematika untuk mengembangkan game 3D,
+dan cara berinteraksi dengan objek lain dengan *raycast*.
 
-## Daftar Isi
+## Daftar isi
 
-- [Tutorial 7 - Basic 3D Level Design](#Tutorial-7---Basic-3D-Level-Design)
-  - [Daftar Isi](#daftar-isi)
+- [Tutorial 7 - Basic 3D Game Mechanics](#tutorial-7---basic-3d-game-mechanics)
+  - [Daftar isi](#daftar-isi)
   - [Pengantar](#pengantar)
-    - [What Is a Level?](#What-Is-a-Level)
-    - [Level Example](#Level-Example)
-  - [Creating A Simple Level using TileMap](#Creating-A-Simple-Level-using-Tilemap)
-    - [Preparation](#Preparation)
-    - [Making Tile Set](#Making-Tile-Set)
-    - [Paint the TileMap](#Paint-the-TileMap)
-  - [Making the Camera Follows The Player](#Making-the-Camera-Follows-The-Player)
-    - [How Simple It Is](#How-Simple-It-Is)
-  - [Adding Area Trigger for Lose and Win Condition](#Adding-Area-Trigger-for-Lose-and-Win-Condition)
-    - [Set Up](#set-up)
-    - [What is Signals?](#What-is-Signals)
-    - [Using Signals](#Using-Signals)
-    - [Adding It to the Level](#Adding-It-to-the-Level)
+    - [2D vs 3D](#2d-vs-3d)
+    - [Objectives & Prerequisites](#objectives--prerequisites)
+  - [Basic 3D Plane Movement](#basic-3d-plane-movement)
+  - [Object Interaction](#object-interaction)
   - [Bonus To Do](#bonus-to-do)
-  - [Instruksi Pengerjaan](#Instruksi-Pengerjaan)
+  - [Instruksi Pengerjaan](#instruksi-pengerjaan)
   - [Skema Penilaian](#skema-penilaian)
   - [Pengumpulan](#pengumpulan)
   - [Referensi](#referensi)
 
 ## Pengantar
 
-Pada tutorial sebelumnya, kita sudah mencoba untuk mengimplementasikan 
-mekanik game 3D sederhanda menggunakan *node* 3D. Kali ini, kita akan mencoba
-membuat level 3D menggunakan CSG (Constructive Solid Geometry).
+> Note: Tersedia template game untuk tutorial ini, namun tidak diwajibkan untuk menggunakannya.
 
-> IMPORTANT: Pada tutorial ini diperbolehkan untuk melanjutkan dari tutorial
-kemarin. Cukup copy folder T6 ke dalam folder T7 sebelum mulai.
+### 2D vs 3D
 
-### Apa itu CSG?
+Pada tutorial yang dilakukan sebelum masa UTS, kita sudah membuat game dua dimensi (2D)
+dimana pemain dapat bergerak pada ruang dua dimensi. Pemain dapat bergerak ke atas,
+bawah, kiri, dan kanan. Pada game 3D, terdapat sumbu tambahan pada ruang koordinat,
+yaitu sumbu Z yang memberikan unsur kedalaman dan volume. Hal ini menyebabkan pengembangan
+game 3D agak berbeda dengan 2D. Menggambar objek tidak menggunakan *sprite*, tetapi menggunakan
+*tool* 3D khusus, yang kemudian di-*export* ke sebuah format agar dapat di-*import* ke Godot.
+*Physics* juga berbeda dalam penggunaannya karena menggunakan vektor 3D.
 
-CSG atau *Constructive Solid Geometry* merupakan sebuah tool dalam Godot Engine
- untuk menggabungkan bentuk-bentuk 3D dasar/primitif seperti *Box* atau *Sphere* 
- agar tercipta suatu bentuk kompleks.
+Berikut adalah contoh perbedaan game 2D dan 3D.
 
-### Fitur CSG
+![Risk of Rain](images/riskofrain.jpg)
+![Risk of Rain 2](images/riskofrain2.jpg)
 
-Node CSG dalam Godot mempunyai 3 operasi boolean diantaranya:
+> Risk of Rain (atas) dan Risk of Rain 2 (bawah)
 
-- Union: Penggabungan bentuk primitif dengan menghilangkan intersection.
-- Intersection: Membuat sisa bentuk hasil penggabungan, sisanya dihilangkan.
-- Substraction: Bentuk primitif kedua hasil gabungan dihilangkan dari yang 
-pertama dengan bagian yang menempel pada bentuk 1 juga hilang.
+### Objectives & Prerequisites
 
-### 3D Level Example
+Pada tutorial ini kita akan membuat sebuah game *first-person* dimana pemain dapat bergerak,
+melompat, dan berinteraksi dengan objek.
 
-Contoh 3D level design dalam beberapa game:
+Dikarenakan pengembangan game 3D akan berbeda dengan 2D, perlu diketahui bahwa beberapa *node* yang sebelumnya
+digunakan pada pengembangan game 2D tidak akan bekerja pada space 3D, sehingga kalian harus menggunakan
+*node* yang dapat bekerja pada space 3D. Selain itu, kalian juga harus me-*review* kembali dasar-dasar
+pelajaran Aljabar Linear dan Fisika Dasar karena *physics* pada space 3D lebih kompleks dibandingkan
+dengan pada space 2D. Terakhir, terdapat koordinat baru, yaitu koordinat Z, yang digunakan untuk
+menunjukkan arah depan/belakang.
 
-![Legend of Zelda: Breath of The Wild](images/BOTW.jpg)
-![Kingdom Hearts III](images/KHIII.jpg)
+## Basic 3D Plane Movement
 
-Kita akan membuat sebuah level 3D sederhana menggunakan salah satu fitur Godot Engine yaitu *CSG*.
-Pada tutorial ini akan didemonstrasikan:
-- Membuat 3D Object menggunakan CSG
-- Membuat level menggunakan CSG
-- Membuat trigger untuk lose dan win condition
+Kita ingin membuat sebuah karakter yang dikendalikan oleh pemain di dunia 3D. Untuk itu,
+kita akan membuat sebuah objek ```KinematicBody``` (mirip dengan ```Kinematic2D```) yang dapat bergerak ke semua arah dan dapat melompat.
 
-## Creating A Simple Level using CSG
+Buat sebuah *Scene* baru, tambahkan *node* ```KinematicBody```, rename menjadi *Player*
+dan tambahkan ```MeshInstance``` dan ```CollisionShape``` sebagai *child node* dari *node*
+*Player*. Tambahkan satu lagi *child node* berupa ```Spatial```, rename menjadi *Head*, dan
+tambahkan ```Camera``` sebagai *child node* dari *Head*.
 
-### Preparation
+![Susunan awal Player](images/playertreeworaycast.jpg)
 
-Buka template project di Godot Editor, kemudian buka scene ```Scenes/Level 1.tscn```.
-Dalam scene tersebut akan terdapat player dengan script yang sudah kalian implementasikan pada
-tutorial sebelumnya.
+Pada node ```CollisionShape```, pada tab *Inspector*, berikan sebuah ```Shape``` yaitu ```CapsuleShape``` untuk
+memberi *collision* pada pemain, lalu putar sebesar 90 derajat pada sumbu x.
 
-![Tampilan Level 1.tscn](images/Level1Blank.jpg)
+![Collision Shape](images/collisionshape.jpg)
 
-Klik kanan pada node ```Level 1``` dan pilih ```Add Child Node```, kemudian pilih ```Spatial```
-dan rename node tersebut menjadi ```World 1```.
+Pada node ```MeshInstance```, pada tab *Inspector*, berikan *mesh* dengan bentuk ```CapsuleMesh``` untuk
+memberi wujud pada pemain, lalu putar sebesar 90 derajat pada sumbu x.
 
-Setelah World 1 selesai dibuat, save node tersebut menjadi sebuah scene baru dengan klik kanan
-pada node World 1 lalu klik ```Save Branch As Scene``` dengan nama ```World 1.tscn```.
+![Mesh Instance](images/meshinstance.jpg)
 
-### Empty Room
+Pindahkan/translasikan *node Head* agar berada di ujung atas objek.
 
-Masuk ke Editor Scene untuk World 1, disini kita akan memanfaatkan CSG untuk membuat ruangan kosong.
-Pada Node World 1, buat child node baru dengan memilih ```CSGBox``` dan beri nama ```Room 1```. 
+Agar pemain dapat bergerak, tambahkan *script* pada *node Player* dengan isi sebagai berikut:
 
-Pada tab Inspector cek ```Invert Faces``` untuk membuat mesh menjadi inverted seperti tampilan Box Kosong dan
-juga Cek ```Use Collision``` agar player tidak jatuh ketika berada di dalam ruangan, untuk sekarang Operation
-pada CSG yang kita buat masih menggunakan mode ```Union```. 
-
-Masih pada tab Inspector, ubah ```Width```, ```Height```, dan ```Width``` dalam CSGBox sesuai keinginanmu lalu 
-atur posisi box pada *Viewport*.
-
-![Example Room](images/ExampleRoom.jpg)
-
-Save Scene tersebut lalu kembali ke Scene ```Level 1``` dan coba Play.
-
-> Note: Anda dapat menambahkan Node OmniLight atau DirectionalLight untuk memudahkan pencahayaan pada saat membuat objek 3D.
-
-### Making 3D Objects
-
-Saat ini game terlihat membosankan, tidak ada gimmick apapun dan hanya ada ruang kosong. Kali ini kita akan mencoba
-untuk membuat objek 3D untuk menghias room yang telah kita buat.
-
-Untuk memudahkan penglihatan pada *viewport*, anda dapat mengubah proyeksi menjadi *Orthogonal* dengan mengklik menu
-pojok kiri atas dalam *viewport*.
-
-![Changing Projection](images/ChangeProjection.jpg)
-
-Buat sebuah 3D Scene baru dan beri nama ```ObjLamp```. Tambahkan child node baru dengan memilih ```CSGCombiner``` dan
-beri nama ```lamp```. ```CSGCombiner``` berfungsi sebagai tempat untuk mengatur komponen CSG di dalamnya, jangan lupa
-mencentang ```Use Collision``` karena objek yang akan dibuat merupakan benda padat.
-
-Dalam ```lamp``` masukkan child note untuk membentuk bagian lampu.
-- Buat ```CSGCylinder``` dengan cek *cone* pada tab Inspector untuk bagian bawah lampu.
-- Buat ```CSGCylinder``` dan atur ukuran pada tab Inspector untuk menjadi tiang lampu.
-- Buat ```CSGPolygon``` dengan memilih Mode *Spin* pada tab Inspector, lalu ubah proyeksi menjadi *Front View* dan atur
-Titik pada polygon hingga membentuk trapesium untuk membentuk penutup lampu.
-
-![CSGPolygon Inspector](images/PolygonInspector.jpg)
-![CSGPolygon Trapezoid](images/PolygonTrapezoid.jpg)
-
-Setelah jadi, atur ketiga child node sehingga membentuk sebuah lampu! Save lalu masukkan Scene tersebut ke dalam Scene
- World 1 dengan klik kanan pada Node World 1 pilih ```Instance Child Scene```.
-
-### Coloring 3D Objects
-
-Masuk kembali pada Scene ```ObjLamp```. Untuk mewarnai penutup lampu, pilih CSGPolygon yang sudah dibuat lalu pada tab
-Inspector klik dropdown ```Material``` dan pilih ```New SpatialMaterial```.
-
-![Inspector Material](images/NewSpatialMaterial.jpg)
-
-Setelah SpatialMaterial dipilih, klik gambar bola yang muncul pada menu ```Material```. Disini anda dapat mengatur tekstur
-dari CSG yang dibuat, untuk sekarang klik menu ```Albedo``` dan ganti warna sesuai yang kalian inginkan.
-
-![Albedo Change Color](images/AlbedoColor.jpg)
-
-Cara pewarnaan ini berlaku untuk semua objek CSG yang kalian buat kecuali ```CSGCombiner```.
-
-## Obstacles and Goal Condition
-
-Seperti yang sudah dipelajari pada Tutorial 4, sebuah level tidak lengkap tanpa tujuan akhir. Maka disini kita akan membuat
-*Obstacle* dan *Goal Condition* agar game dapat berakhir.
-
-### Adding Obstacles
-
-Misalkan kita ingin menambahkan halangan untuk player dapat menuju goal seperti field yang berlubang atau jurang yang hanya dapat dilewati menggunakan function jump yang telah anda buat pada tutorial 6.
-
-Buka Scene ```World 1```, lalu buat ```CSGCombiner``` baru dan centang ```Use Collision``` pada tab Inspector. Lalu masukkan Node ```Room 1``` ke dalam CSGCombiner yang telah dibuat. Tambahkan 2 ```CSGBox``` ke dalam CSGCombiner masing-masing akan menjadi room yang baru dan lubang. Atur sedemikian rupa menggunakan operation ```Union``` untuk membuat ruang baru dan lubang.
-
-![Obstacle Mapping](images/ObstacleMap.jpg)
-![Obstacle](images/obstacle.jpg)
-
-Lalu tambahkan ```CSGBox``` lagi diluar CSGCombiner agar player bisa melompati lubang untuk menyebrang.
-
-![Jumping Path](images/path.jpg)
-
-### Adding Goal Condition
-
-Pada tutorial 4 anda telah belajar menggunakan signals pada 2D level, kali ini kita akan mencoba menggunakan signals kembali untuk menambahkan goal condition.
-
-### Set Up
-
-Pertama buat scene baru (nama bebas) dengan ```Area``` sebagai root node.
-
-![New Area](images/AreaNode.jpg)
-
-Lalu tambahkan node ```CollisionShape``` sebagai child dari node ```Area``` tadi.
-Jangan lupa untuk membuat _collision shape_ pada node ```CollisionShape``` (Kamu seharusnya sudah pernah melakukannya pada tutorial sebelumnya) kali ini buat bentuk *Sphere*.
-
-![Area Hierarchy](images/AreaMap.jpg)
-
-Kemudian _attach_ sebuah script pada node ```Area``` (penamaan bebas).
-Hapus semua baris kecuali baris pertama, kita akan menggunakan _Signals_ untuk fitur ini.
-
-### Using Signals
-
-Pertama select node ```Area``` lalu buka tab ```Node```.
-Lalu pada subtab ```Signals``` pilih ```body_entered(Node body)``` dan klik tombol ```Connect``` di kanan bawah tab tersebut.
-
-![Signals](images/AreaSignals.jpg)
-
-Pastikan ```Area``` terpilih pada bagian ```Connect To Node```, isi ```Method In Node``` dengan nama fungsi yang kamu inginkan atau biarkan default.
-Jika sudah tekan tombol ```Connect```
-
-![Connect Signal](images/AreaSignalAdd.jpg)
-
-Maka script pada ```Area``` akan ditambah fungsi tersebut.
-
-![Area Script](images/AreaTriggerScript.jpg)
-
-Silakan tambah cuplikan dibawah pada script tersebut. (Jangan lupa ganti nama fungsi sesuai penamaan masing-masing)
 ```
-extends Area
+extends KinematicBody
 
-export (String) var sceneName = "Level 1"
+export var speed = 10
+export var acceleration = 5
+export var gravity = 0.98
+export var jump_power = 30
+export var mouse_sensitivity = 0.3
 
-func _on_Area_Trigger_body_entered(body):
-    if body.get_name() == "Player":
-        get_tree().change_scene(str("res://Scenes/" + sceneName + ".tscn"))
+onready var head = $Head
+
+var velocity = Vector3()
+
+func _ready():
+    Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+func _input(event):
+    pass
+
+func _process(delta):
+    if Input.is_action_just_pressed("ui_cancel"):
+        Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+func _physics_process(delta):
+    var head_basis = head.get_global_transform().basis
+    
+    var movement_vector = Vector3()
+    if Input.is_action_pressed("movement_forward"):
+        movement_vector -= head_basis.z
+    if Input.is_action_pressed("movement_backward"):
+        movement_vector += head_basis.z
+    if Input.is_action_pressed("movement_left"):
+        movement_vector -= head_basis.x
+    if Input.is_action_pressed("movement_right"):
+        movement_vector += head_basis.x
+    
+    movement_vector = movement_vector.normalized()
+    
+    velocity = velocity.linear_interpolate(movement_vector * speed, acceleration * delta)
+    velocity.y -= gravity
+    
+    if Input.is_action_just_pressed("jump") and is_on_floor():
+        velocity.y += jump_power
+    
+    velocity = move_and_slide(velocity, Vector3.UP)
 ```
 
-Secara singkat fungsi tersebut akan tereksekusi setiap ada object dengan tipe ```Node``` yang masuk area collision.
-Jika object tersebut adalah player, maka ubah root node (current scene) dengan variabel ```sceneName```.
+Pada *Project* > *Project Settings*, pada tab *Input Map*, tambahkan action `movement_forward`,
+`movement_backward`, `movement_left`, `movement_right`, `jump` dan `interact` sebagai berikut
+(akan digunakan nantinya):
 
-### Adding It to the Level
+![Input](images/input.jpg)
 
-Save scene dan script tersebut (Mulai sekarang disebut ```AreaTrigger```) dan buka kembali scene ```Level 1.tscn```.
+Perhatikan bahwa:
 
-Kemudian tambahkan scene ```AreaTrigger``` sebagai child dari sprite tersebut, silakan atur scaling sesuai keperluan.
-Jangan lupa ubah variable ```Scene Name``` menjadi "Win Screen".
+1. ```head_basis``` merupakan vektor yang menunjukkan arah dari kepala pemain, sehingga jika
+   menekan input untuk menggerakan pemain, ```movement_vector``` akan berisi
+   arah sumbu x dari kepala pemain ketika bergerak ke kiri atau kanan, dan sumbu z dari kepala pemain
+   ketika bergerak ke depan atau belakang.
+2. Kita mengubah ```movement_vector``` menjadi ```movement_vector.normalized()```, karena
+   jika diberikan input pada dua arah seperti ke depan dan ke kiri, maka pemain tidak akan
+   maju dua kali lebih cepat.
+3. Fungsi ```linear_interpolate``` berguna agar pergerakan pemain mulus sesuai dengan
+   *acceleration* dari pemain ketika menekan input.
+4. Fungsi ```move_and_slide``` berfungsi untuk menggerakan pemain.
 
-![Camera Inspector](images/AreaInspector.jpg)
+Tambahkan *scene Player* ke *scene Level*, lalu coba jalankan *scene* tersebut. Pemain sudah dapat
+bergerak, namun pemain tidak dapat menggerakan kamera menggunakan *mouse* untuk menghadap arah lain. Untuk itu,
+tambahkan kode berikut:
 
-Lakukan hal yang sama untuk area lubang namun dengan ```Scene Name``` diisi dengan "Level 1".
-Supaya ketika player jatuh ke jurang, scene akan di-reload.
+```
+...
+onready var head = $Head
+onready var camera = $Head/Camera
 
-Selamat, tutorial ini sudah selesai!
+var velocity = Vector3()
+var camera_x_rotation = 0
+
+...
+
+func _input(event):
+	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+    head.rotate_y(deg2rad(-event.relative.x * mouse_sensitivity))
+
+    var x_delta = event.relative.y * mouse_sensitivity
+    if camera_x_rotation + x_delta > -90 and camera_x_rotation + x_delta < 90:
+    	camera.rotate_x(deg2rad(-x_delta))
+    	camera_x_rotation += x_delta
+...
+```
+
+Kode tersebut berguna untuk merotasikan *node Head* ketika mouse bergerak, dan juga mencegah rotasi melebihi
+90 derajat ketika melihat ke atas atau bawah.
+
+## Object Interaction
+
+Pada *scene Level*, terdapat sebuah node *switch* yang digunakan untuk menyalakan atau mematikan lampu *OmniLight*.
+Agar objek *switch* tersebut dapat dilakukan sebuah interaksi (seperti mematikan dan menyalakan), tambahkan 2 buah script berikut:
+
+> Interactable.gd
+
+```
+extends Node
+
+class_name Interactable
+
+func interact():
+    pass
+```
+
+> Switch.gd (attach script ini pada node StaticBody di Switch)
+
+```
+extends Interactable
+
+export var light : NodePath
+export var on_by_default = true
+export var energy_when_on = 1
+export var energy_when_off = 0
+
+onready var light_node = get_node(light)
+
+var on = on_by_default
+
+func _ready():
+    light_node.set_param(Light.PARAM_ENERGY, energy_when_on)
+
+func interact():
+    on = !on
+    light_node.set_param(Light.PARAM_ENERGY, energy_when_on if on else energy_when_off)
+```
+
+Perhatikan bahwa kita meng*extend class* ```Interactable``` pada *Switch*, agar kode dapat digunakan kembali
+jika ingin membuat objek ```Interactable``` lain.
+
+Pada bagian *inspector*, attach *OmniLight* sebagai isi dari variable *Light*, seperti berikut:
+
+![Static Body](images/staticbody.jpg)
+
+Agar pemain dapat berinteraksi dengan objek lain, kita dapat menggunakan *node* ```RayCast```. ```RayCast```
+merepresentasikan sebuah garis dari suatu titik ke titik lain, dan menkueri objek terdekat yang
+ditemuinya. Tambahkan *node* ```RayCast``` sebagai *child* dari *head* pemain. Pastikan
+```RayCast``` menghadap arah yang sama dengan ```Camera``` dengan mengatur nilai *cast to* di *inspector*.
+
+![Susunan Player](images/playertree.jpg)
+
+Pada *node* ```RayCast```, tambahkan *script* sebagai berikut:
+
+```
+extends RayCast
+
+var current_collider
+
+func _ready():
+    pass
+
+func _process(delta):
+    var collider = get_collider()
+    
+    if is_colliding() and collider is Interactable:
+        if Input.is_action_just_pressed("interact"):
+            collider.interact()
+```
+
+Fungsi ini mengecek jika ```RayCast``` menyentuh sebuah objek lain yang berupa *Interactable*,
+dan pemain dapat menekan tombol (misalnya E) untuk berinteraksi dengan objek tersebut. Dalam
+kasus ini, berinteraksi dengan *switch* akan mematikan atau menyalakan lampu.
+
+Selamat, kamu sudah menyelesaikan tutorial ini!
 
 ## Bonus To Do
 
-Apabila masih ada waktu atau ingin lanjut berlatih mandiri, silakan baca referensi yang tersedia untuk belajar mengimplementasikan fitur tambahan.
-Tidak ada kriteria khusus untuk ini, kamu bebas menambahkan apapun yang kamu suka. Beberapa contoh yang bisa diimplementasikan:
-- 3D Object dengan animasi
-- Implementasi Interact dengan object untuk menyelesaikan puzzle
-- 2nd Level
-- Estetika
+Apabila masih ada waktu atau ingin lanjut berlatih mandiri, silakan baca referensi yang tersedia untuk belajar mengimplementasikan mekanik tambahan.
+Tidak ada kriteria khusus untuk ini, kamu bebas menambahkan apapun yang kamu suka. Beberapa contoh yang dapat diimplementasikan:
+
+- Item pickup
+- Sprinting
+- Crouching
+- Estetika (User Interface dan penggunaan asset 3D)
 - dll.
 
-Jika mengerjakan fitur tambahan, buat file baru bernama ```T7_[NPM].md``` dimana ```[NPM]``` adalah NPM kamu (misal: ```t7_1506757913```) di folder yang sama dengan ```readme.md``` ini.
-Tulis teks menggunakan format [Markdown](https://docs.gitlab.com/ee/user/markdown.html).
+Jika mengerjakan fitur tambahan, buat file baru bernama `T7_[NPM].md` dimana
+`[NPM]` adalah NPM kamu (misal: `T7_1506757913`) di folder yang sama dengan
+[`README.md`](README.md) ini. Tulis teks menggunakan format [Markdown](https://docs.gitlab.com/ee/user/markdown.html).
 
 ## Instruksi Pengerjaan
 
-1. Dalam repositori pribadi kamu, silakan sinkronisasi _branch_ ```master``` dengan repositori _upstream_.
-   Instruksi lebih lanjut bisa dibaca [disini](https://help.github.com/en/articles/syncing-a-fork).
-2. Jika terdapat _conflict_, mohon diselesaikan secara damai.
-   Jika tidak yakin bagaimana caranya, silakan ambil mata kuliah *Advanced Programming* atau baca [ini](https://help.github.com/en/articles/resolving-a-merge-conflict-using-the-command-line).
-3. Setelah semua selesai, buat _branch_ baru dari _branch_ ```master``` dengan nama ```tutorial-x``` dimana ```x``` adalah nomor tutorial (misal: tutorial-7).
-4. Ganti _current branch_ menjadi ```tutorial-x``` tersebut, silakan kerjakan tutorial di dalam _branch_ yang bersangkutan.
-   Setiap _branch_ tutorial **tidak perlu** di _merge_ ke _branch_ ```master```.
+1. Dalam repositori pribadi kamu, silakan sinkronisasi _branch_ `master` dengan
+   repositori _upstream_. Instruksi lebih lanjut bisa dibaca [disini](https://help.github.com/en/articles/syncing-a-fork).
+2. Jika terdapat _conflict_, mohon diselesaikan secara damai. Jika tidak yakin
+   bagaimana caranya, silakan ambil mata kuliah *Advanced Programming* atau
+   baca [ini](https://help.github.com/en/articles/resolving-a-merge-conflict-using-the-command-line).
+3. Setelah semua selesai, buat _branch_ baru dari _branch_ `master` dengan nama
+   `tutorial-x` dimana `x` adalah nomor tutorial (misal: `tutorial-7`).
+4. Ganti _current branch_ menjadi `tutorial-x` tersebut, silakan kerjakan
+   tutorial di dalam _branch_ yang bersangkutan. Setiap _branch_ tutorial
+   **tidak perlu** di _merge_ ke _branch_ `master`.
 
 ## Skema Penilaian
 
@@ -261,10 +297,12 @@ tutorial ini di repositori milik pribadi. **Jangan _push_ atau membuat Merge
 Request ke repositori _upstream_ materi tutorial kecuali jika kamu ingin
 kontribusi materi atau memperbaiki materi yang sudah dipublikasikan!**
 
-Tenggat waktu pengumpulan adalah **Sabtu, 16 November 2019, pukul 21:00**.
+Tenggat waktu pengumpulan adalah **Jumat, 20 November 2020, pukul 21:00**.
 
 ## Referensi
 
-- [CSG](https://docs.godotengine.org/en/3.1/tutorials/3d/csg_tools.html)
-- [Signals](https://docs.godotengine.org/en/3.1/getting_started/step_by_step/signals.html)
+- [Godot 3D Tutorial](http://docs.godotengine.org/en/3.1/tutorials/3d/index.html)
+- [Godot FPS Tutorial](http://docs.godotengine.org/en/3.1/tutorials/3d/fps_tutorial/index.html)
 - [Kenney 3D Assets](https://www.kenney.nl/assets?q=3d)
+- Materi tutorial pengenalan Godot Engine, kuliah Game Development semester
+  gasal 2020/2021 Fakultas Ilmu Komputer Universitas Indonesia.
