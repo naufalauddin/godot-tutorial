@@ -132,7 +132,8 @@ ide abstrak sebagai berikut: _**"Balapan dari sebuah tempat asal ke tempat tujua
 >     putri yang diculik? Atau sekedar iseng? _Silakan berkreasi!_
 >   - Dimana dan kapan balapan ini terjadi? Apakah di dunia pertengahan abad 15?
 >     Di luar angkasa? Di dalam tubuh? Atau di tempat dan waktu lainnya? _Silakan berkreasi!_
->   - Apa alat yang akan digunakan oleh tokoh-tokoh di dunia cerita ini ketika >     balapan? Apakah menggunakan pesawat terbang? Kapal? Lari? Monster? 
+>   - Apa alat yang akan digunakan oleh tokoh-tokoh di dunia cerita ini ketika 
+>     balapan? Apakah menggunakan pesawat terbang? Kapal? Lari? Monster? 
 >     _Silakan berkreasi!_
 > - Pertanyaan 8: Gambarkan, dalam bentuk sketsa gambar atau _bullet points_ tulisan, gambaran visual dari dunia cerita pada kertas. Jangan lupa untuk dikaitkan dengan _experience_ yang diinginkan. Misal: bila balapan
 >   terjadi di dunia abad pertengahan, mungkin kamu bisa menggambarkan kastil
@@ -147,7 +148,7 @@ ide abstrak sebagai berikut: _**"Balapan dari sebuah tempat asal ke tempat tujua
 >   _Silakan berkreasi!_
 >
 > - _Instruksi kepada **asisten**: Silakan fasilitasi diskusi dan pengerjaan selama 45 menit. Tunjuk 1 - 3 mahasiswa secara acak untuk sharing._
-> - _Instruksi kepada **peserta kuliah**: Silakan tulis dan ilustrasikan jawaban-jawaban dari pertanyaan 4 - 8 di selembar kertas. Boleh bolak-balik atau menambah kertas apabila ruang kosong di kertas tidak cukup untuk menampung ide kamu._
+> - _Instruksi kepada **peserta kuliah**: Silakan tulis dan ilustrasikan jawaban-jawaban dari pertanyaan 4 - 9 di selembar kertas. Boleh bolak-balik atau menambah kertas apabila ruang kosong di kertas tidak cukup untuk menampung ide kamu._
 
 Di akhir tutorial ini, kurang lebih kamu telah menempuh proses kilat dalam
 merancang sebuah game. Tentu saja proses yang lebih rinci akan kamu tempuh
