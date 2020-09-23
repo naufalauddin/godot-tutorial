@@ -14,8 +14,8 @@ Sekadar mengingatkan, pastikan kamu:
 - Telah menjadi anggota kelompok tugas proyek akhir.
 
 Apabila kamu belum membentuk atau bergabung ke kelompok tugas proyek akhir,
-jangan lupa untuk bergabung atau membentuk kelompok sebelum tanggal
-**28 September 2020**.
+jangan lupa untuk bergabung atau membentuk kelompok sebelum
+**25 September 2020 jam 23:59**.
 
 ## Daftar Isi
 
