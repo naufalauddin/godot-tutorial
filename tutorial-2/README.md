@@ -9,13 +9,13 @@ Git daring.
 
 Sekadar mengingatkan, pastikan kamu:
 
-- Telah mengunduh dan memasang [Godot v3.1.1](https://godotengine.org/download)
+- Telah mengunduh dan memasang [Godot v3.2.3](https://godotengine.org/download)
   edisi **Standard** sesuai dengan _development environment_ yang kamu gunakan.
 - Telah menjadi anggota kelompok tugas proyek akhir.
 
 Apabila kamu belum membentuk atau bergabung ke kelompok tugas proyek akhir,
 jangan lupa untuk bergabung atau membentuk kelompok sebelum
-**25 September 2020 jam 23:59**.
+**25 September 2020 jam 21:00**.
 
 ## Daftar Isi
 
@@ -33,10 +33,13 @@ jangan lupa untuk bergabung atau membentuk kelompok sebelum
 ## Pengantar
 
 Tutorial ini disusun dengan mengambil beberapa referensi dari dokumentasi
-resmi [Godot v3.1](https://godot.readthedocs.io/en/3.1/index.html) dimana
+resmi [Godot v3.2](https://docs.godotengine.org/en/3.2/) dimana
 kamu akan mengikuti instruksi-instruksi di dalam dokumen ini untuk mengenal
 _game engine_ Godot dan menggunakannya untuk membuat sebuah game sangat
-sederhana. Namun sebelumnya, mungkin masih ada yang bertanya-tanya:
+sederhana. Namun beberapa gambar yang ada di tutorial ini diambil dari Godot v3.1.1.
+Jadi nanti ikuti tutorialnya harap teliti ya, bisa jadi ada sedikit tulisan yang berbeda
+antara perintah yang diberikan dan gambar visualisasinya. Terakhir, mungkin 
+masih ada yang bertanya-tanya:
 "_Mengapa harus belajar menggunakan game engine seperti Godot, Unity, atau
 Unreal, untuk membuat game?_"
 
@@ -80,16 +83,16 @@ sebagai berikut:
 1. Jalankan Godot. Apabila Godot kamu merupakan instalasi baru (_fresh_), maka
    akan muncul _modal window_ yang menanyakan apakah kamu ingin membuka **Assets Library**.
    Pilih **Open Assets Library**, lalu tunggu beberapa saat hingga proses
-   _loading_ selesai dan pilih _tab_ **Project List**.
+   _loading_ selesai dan pilih _tab_ **Projects**.
 
    > Catatan: **Assets Library** adalah repositori aset siap pakai yang dapat
    > digunakan dalam proyek game Godot. Bagi yang pernah menggunakan _game engine_
    > Unity, fungsinya serupa dengan Unity Assets Store.
-1. Impor proyek game `T2Game` dengan menggunakan fitur **Import** di tampilan
-   Project List.
+1. Impor proyek game `T2` dengan menggunakan fitur **Import** di tampilan
+   Projects.
 
    ![Animasi impor proyek game](images/import_project.gif)
-1. Jika Godot sudah selesai impor proyek `T2Game`, maka akan muncul tampilan
+1. Jika Godot sudah selesai impor proyek `T2`, maka akan muncul tampilan
    Godot Editor. Tampilan _default_ Godot Editor dapat dilihat pada cuplikan
    gambar berikut:
 
@@ -165,11 +168,12 @@ _shortcut_ yang dapat kamu gunakan, seperti:
 - F1: Ganti _viewport_ ke mode 2D.
 - F2: Ganti _viewport_ ke mode 3D.
 - F3: Ganti _viewport_ menjadi _script editor_.
-- F4: Buka tampilan pencarian dokumentasi.
+- Shift + F1: Buka tampilan pencarian dokumentasi.
 - Q: Ganti mode manipulasi menjadi **Select**.
 - W: Ganti mode manipulasi menjadi **Move**.
 - E: Ganti mode manipulasi menjadi **Rotate**.
-- R: Ganti mode manipulasi menjadi **Scale**.
+- S: Ganti mode manipulasi menjadi **Scale**.
+- R: Ganti mode manipulasi menjadi **Ruler**
 
 Tombol-tombol _shortcut_ lainnya dapat dilihat di menu Editor > Editor
 Settings > Shortcuts.
@@ -230,7 +234,7 @@ Perhatikan bagian-bagian penting dari _scene_ yang sedang dibuka:
 ![Tampilan scene Main dengan keterangan](images/annotated_open_scene.png)
 
 1. Panel **FileSystem** menampilkan koleksi berkas yang ada di dalam proyek
-   `T2Game`. Saat ini, ada 3 buah berkas _scene_ yang berakhiran `.tscn` dan
+   `T2`. Saat ini, ada 3 buah berkas _scene_ yang berakhiran `.tscn` dan
    ada folder berisi berkas-berkas gambar dengan format PNG. Perlu diingat
    bahwa semua aset pada game Godot perlu ditaruh dalam folder proyek game.
 2. Panel **Scene** menampilkan hirarki _node_ di dalam _scene_ yang sedang
@@ -312,7 +316,7 @@ dan jawablah pertanyaan-pertanyaan berikut:
   `StonePlatform` dan `StonePlatform2` tidak sesuai dengan posisinya di dalam
   _scene_ (menurut Inspector) namun visualisasinya berada di posisi yang tepat?
 
-> Catatan: Jangan lupa ada _shortcut_ F4 untuk memunculkan dokumentasi tipe-tipe
+> Catatan: Jangan lupa ada _shortcut_ Shift + F1 untuk memunculkan dokumentasi tipe-tipe
 > _node_ pada Godot.
 
 ## Latihan Ekstra: Membuat Node dan Scene
