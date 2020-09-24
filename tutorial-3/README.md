@@ -129,7 +129,7 @@ Kita akan membuat sebuah objek Kinematic2D yang dapat bergerak ke kiri dan ke ka
 ### Setting things up
 
 Buka Project Godot tutorial ini dalam Godot Editor, kemudian pada FileSystem buka folder Scenes. Buka scene ```Main.tscn```. Akan terdapat Ground yang melayang dalam scene tersebut. Kita akan menaruh sesuatu yang dapat bergerak disana.
-![Tampilan Main.tscn](images/main-scene.png)
+![Tampilan Main.tscn](images/main-scene.PNG)
 
 Buat Scene baru dan tambahkan Node Kinematic2D pada scene tersebut. Ubah nama node tersebut menjadi Player. Tambahkan child node Sprite dan CollisionShape2D dengan menggunakan menu Add Child Node.
 
