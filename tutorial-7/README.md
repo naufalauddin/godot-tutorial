@@ -221,8 +221,8 @@ Pada bagian *inspector*, attach *OmniLight* sebagai isi dari variable *Light*, s
 
 Agar pemain dapat berinteraksi dengan objek lain, kita dapat menggunakan *node* ```RayCast```. ```RayCast```
 merepresentasikan sebuah garis dari suatu titik ke titik lain, dan menkueri objek terdekat yang
-ditemuinya. Tambahkan *node* ```RayCast``` sebagai *child* dari *head* pemain. Pastikan
-```RayCast``` menghadap arah yang sama dengan ```Camera``` dengan mengatur nilai *cast to* di *inspector*.
+ditemuinya. Tambahkan *node* ```RayCast``` sebagai *child* dari *head* pemain. **Pastikan
+```RayCast``` menghadap arah yang sama dengan ```Camera``` dengan mengatur nilai *cast to* di *inspector* dan jangan lupa untuk meng-enable node ```RayCast``` melalui tab inspector.**
 
 ![Susunan Player](images/playertree.jpg)
 
