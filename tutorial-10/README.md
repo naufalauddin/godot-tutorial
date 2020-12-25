@@ -153,3 +153,5 @@ Tenggat waktu pengumpulan adalah **Sabtu, 2 Januari 2021, pukul 21:00**.
 - Panduan melakukan _export_ di [dokumentasi resmi Godot](https://docs.godotengine.org/en/stable/getting_started/workflow/export/exporting_projects.html)
 - [_Tool_ daring untuk membuat berkas _build options_ (`custom.py`)](https://godot-build-options-generator.github.io/)
 - Dokumen-dokumen terkait kompilasi, termasuk membuat _export template_ baru di [dokumentasi resmi Godot](https://docs.godotengine.org/en/stable/development/compiling/index.html)
+- Materi tutorial pengenalan Godot Engine, kuliah Game Development semester
+  gasal 2020/2021 Fakultas Ilmu Komputer Universitas Indonesia.
