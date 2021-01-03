@@ -24,7 +24,7 @@ tutorial-11
 -------- etc.
 ```
 
-2. Buat file `.gitlab-ci.yml` baru di dalam folder **tutorial-11** dimana setara dengan folder **tutorial-X**, lalu isi dengan _script_ berikut:
+2. Buat file `.gitlab-ci.yml` baru di dalam **root projek kalian**, lalu isi dengan _script_ berikut:
 
 ```
 image: barichello/godot-ci:3.2.3
@@ -34,14 +34,15 @@ stages:
   - deploy
 
 variables:
-  EXPORT_NAME: tutorial-X
+  EXPORT_NAME: tutorial-11/tutorial-X
+  NAME: tutorial-X
 
 windows:
   stage: export
   script:
     - mkdir -v -p build/windows
     - cd $EXPORT_NAME
-    - godot -v --export "Windows Desktop" ../build/windows/$EXPORT_NAME.exe
+    - godot -v --export "Windows Desktop" ../../build/windows/$NAME.exe
   artifacts:
     name: $EXPORT_NAME-$CI_JOB_NAME
     paths:
@@ -52,7 +53,7 @@ web:
   script:
     - mkdir -v -p build/web
     - cd $EXPORT_NAME
-    - godot -v --export "HTML5" ../build/web/index.html
+    - godot -v --export "HTML5" ../../build/web/index.html
   artifacts:
     name: $EXPORT_NAME-$CI_JOB_NAME
     paths:
@@ -61,7 +62,7 @@ web:
 
 Secara singkat, _script_ ini akan menjalakan sebuah _stage_ `export` di mana ada dua tahap yaitu `windows` dan `web`. Ditiap tahap ini akan membuat sebuah direktori atau folder _artifact_ baru, dimana tiap folder ini akan berisi _archive_ dari _export_ proyek Godot kalian.
 
-3. Sesuaikan variabel `EXPORT_NAME: tutorial-X` dengan nama folder project yang tadi kalian copy dan paste ke **tutorial-11**.
+3. Sesuaikan variabel `EXPORT_NAME: tutorial-11/tutorial-X dan NAME: tutorial-X` dengan nama folder project yang tadi kalian copy dan paste ke **tutorial-11**.
 
 4. Buka aplikasi Godot, lalu _import project_ pada **tutorial-X** ini. Lalu _setting project export_ di **Project>export..>Add..** (tambahkan windows dan html sesuai dengan stage: export pada gitlab ci yml tadi).
 
@@ -112,7 +113,7 @@ Secara singkat script ini mengubah branch ke `git-deploy` dan menghapus semua `.
 
 4. Selanjutnya seperti biasa yaitu _push_ hasil pekerjaan kedalam Gitlab. Lalu perhatikan _pipeline_ dari _commit_ ini. 
 
-5. Setelah pipeline berhasil, ketik **https://[user_gitlab_kalian].gitlab.io/tutorial-11/** pada browser kalian. Berikut adalah hasilnya (menggunakan tutorial-3). 
+5. Setelah pipeline berhasil, ketik **https://[user_gitlab_kalian].gitlab.io/tutorials/** pada browser kalian. Berikut adalah hasilnya (menggunakan tutorial-3). 
 
 ![Web Preview](images/web_preview.jpg)
 
