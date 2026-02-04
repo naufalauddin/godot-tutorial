@@ -361,6 +361,13 @@ tile_size = Vector2i(64, 64)
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_7jktm")
 
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_feb5d"]
+normal = Vector2(-1, 0)
+distance = -1190.0
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_fc0e3"]
+normal = Vector2(1, 0)
+
 [node name="Game" type="Node" unique_id=1565674302]
 
 [node name="Background" type="Node2D" parent="." unique_id=121674905]
@@ -378,3 +385,12 @@ tile_set = SubResource("TileSet_ryrav")
 
 [node name="Player" parent="." unique_id=314403977 instance=ExtResource("3_fc0e3")]
 position = Vector2(173, 385)
+
+[node name="Boundary" type="StaticBody2D" parent="." unique_id=2067949862]
+
+[node name="RightBoundary" type="CollisionShape2D" parent="Boundary" unique_id=1131362625]
+shape = SubResource("WorldBoundaryShape2D_feb5d")
+
+[node name="LeftBoundary" type="CollisionShape2D" parent="Boundary" unique_id=1613148984]
+position = Vector2(-36.04, 0)
+shape = SubResource("WorldBoundaryShape2D_fc0e3")
