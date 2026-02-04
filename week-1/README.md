@@ -27,12 +27,16 @@ There are several steps you need to take before using this tutorial.
       git clone <the repository url>
       ```
 3. Import the game project under the following directory to Godot:
-
+    1. click on the import button
+       ![](./images/import.png)
+    2. Find the cloned repository, then go to the `week-1` > `godot-interface` folder and click `project.godot` files.
+       ![](./images/impor_project.png) 
 
 ## Godot Editor Interface
 
 The Godot Editor interface consists of several panels explained as follows:
 
+1. **FileSystem**: A tab for organizing and structuring files and assets within the open project.
 1. **Viewport**: A window that displays the scene in the game, code editor, or Asset Library, according to what is selected in **Workspaces**.
 2. **Workspaces**: A panel for switching what is displayed in the Viewport. There are four types:
    - **2D**: Displays the scene in a two-dimensional view.
@@ -41,7 +45,6 @@ The Godot Editor interface consists of several panels explained as follows:
    - **AssetLib**: Displays a library of addons, scripts, and free assets.
 
 3. **Playtest Buttons**: A panel for running the project or scene.
-4. **FileSystem**: A tab for organizing and structuring files and assets within the open project.
 5. **Scene**: A tab that displays the hierarchy of objects in the active scene.
 6. **Import**: A window for setting import options for the selected asset file.
 7. **Inspector**: Displays specific details of the selected object in the scene. It generally includes a **Transform** component that manages the position, rotation, and scale of the selected object. Specific settings are also available depending on the type of selected object.
@@ -80,7 +83,7 @@ node as a collection of data and behaviour that represents a single functionalit
 is a node that responsible in drawing a picture of the object, [`PhysicsBody2D`](https://docs.godotengine.org/en/stable/classes/class_physicsbody2d.html)
 is a node that responsible handling the physics of the object like collision, etc.
 
-![]()
+![](./images/node_hierarchy.png)
 
 A node in Godot have the following property:
 1. It has a name
