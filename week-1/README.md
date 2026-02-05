@@ -16,7 +16,7 @@ There are several steps you need to take before using this tutorial.
 > Then you need to install git, with the following command
 > (type it to the terminal, by first opening iSH/termux):
 > ```
-> apk install git
+> apk add git
 > ```
 
 2. Clone the repository to your device. For this one you need to be
