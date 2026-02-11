@@ -260,9 +260,83 @@ is used to check if a class of input called `ui_accept` have been just pressed r
 These lines of code tell Godot to check if `"ui_left"` and `"ui_right"` input is being pressed and
 here `"ui_left"` is given as the negative value and `"ui_right"` is given as the positive value.
 `Input` will aggregate both of the value depending if any of the input group is being pressed.
+
 By default the left and right arrow is part of the `"ui_left"` and `"ui_right"` input group.
+
 If any of the key is being pressed the value of direction will be assigned non-zero value, and
-then checked by in the `if` condition.
+then checked by in the `if` condition. If there's a movement (`direction` is not zero) we will give
+the `velocity`'s `x` component is set to the `SPEED` according to the direction. If there's no movement
+the `velocity`'s `x` component is slowly set to zero with the `move_toward` function.
 
 > [!NOTE]
 > Non-zero value is considered as `true` in godot.
+
+### Adding the Player to the Game Scene
+
+Let's open back our `game` scene. Pick on the 2D viewer so we can see the game again. Now drag the
+`player.tscn` file to the viewport to add it into the game.
+
+![](./images/drag_player.png)
+
+Now if you click on play, you can move the character left and right by using the left and right key,
+and jump with the enter key (by default enter is part of the `"ui_accept"` input group).
+
+### Adding Custom Input Group
+
+You might think that using the enter key for jump is rather awkward, let's changed that by adding
+a new input group. Let's also add WASD into the input group as that is the default movement keys
+for most gamers.
+
+First click on the `project` tab at the top of the Godot Editor, and choose `project settings`. Then
+go to the `Input Map` tab.
+
+![](./images/project_tab.png)
+![](./images/choose_project_settings.png)
+![](./images/input_map_tab.png)
+
+On the Input Map tab, write `Up` on the `Add New Action` input modal, then click the `+ Add` button.
+Also do the same for `Left` and `Right`.
+
+![](./images/input_map_add.png)
+
+Then click no the `+` besides the input group label. Push the up arrow key and click `OK`.
+
+![](./images/input_map_register_to_group.png)
+![](./images/input_map_register.png)
+
+Do the same to add `W` key to the `Up` input group, Left Arrow and `A` to the `Left` input group, and
+Right Arrow and `D` to the `Right` input group, so that it would look like this.
+
+![](./images/input_map_done.png)
+
+> [!IMPORTANT]
+> If you use Ipad and Xogot, you have to register the `Joypad Axis 0 -`, `Joypad Axis 0 +` for the
+> `Left` and `Right`, and `Joypad Button 0` for the `Up`.
+> You also need to enable the virtual joypad under the project settings.
+> 
+> ![](./images/input_map_joypad_axes.png)
+
+After that we need to adjust the code under the `player.gd` script to use the new input group.
+
+```gdscript
+    ...
+	if Input.is_action_just_pressed("Up") and is_on_floor():
+        ...
+    ...
+	var direction := Input.get_axis("Left", "Right")
+    ...
+```
+
+## Challenge
+
+If there's still additional time or you want to learn on your own, you can try reading the
+documentation and add a new movement mechanic. Here are some ideas of movement mechanic that
+you can implement:
+
+ - Double Jump
+ - Dashing
+
+
+## Reference
+
+ - https://docs.godotengine.org/en/stable/tutorials/2d/2d_movement.html
