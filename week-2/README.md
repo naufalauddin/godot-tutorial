@@ -119,7 +119,7 @@ will demonstrate the following:
 
 ### setting things up
 
-Open this Godot Project in this toturial in the Godot Editor. Next on the FileSystem dock, open
+Open this Godot Project in this toturial in the Godot Editor. Next on the FileSystem panel, open
 the `game.tscn` file by double clicking the file. There will be a platform and a slime. We will
 place an object that we can control there.
 
@@ -136,13 +136,13 @@ scene tab.
 ![](./images/sprite_2d.png)
 ![](./images/character_node.png)
 
-Click on the `CollisionShape2D` node and look on the Inspector dock. Add a shape to the node by
+Click on the `CollisionShape2D` node and look on the Inspector panel. Add a shape to the node by
 picking new `CapsuleShape2D`.
 
 ![](./images/inspect_collision.png)
 ![](./images/inspect_capsule.png)
 
-Click on the `Sprite2D` node and look on the Inspector dock. On the texture menu, click on the `load`
+Click on the `Sprite2D` node and look on the Inspector panel. On the texture menu, click on the `load`
 and open the `assets` folder, pick one of the picture available on the folder.
 
 ![](./images/inspect_sprite.png)
@@ -154,3 +154,55 @@ Save the scene. This object will be our scripting target.
 > You are free to choose the node's name, scene's name, and sprite. You are allowed to use your own assets.
 
 ### Making a Script
+
+On the scene panel, right click on the `Player` node. Pick `Attach Script` on the menu. A menu will pop
+up then click on create.
+
+![](./images/attach_script.png)
+![](./images/create_script.png)
+
+Script will automatically opened on the Godot Editor. Godot 4.6 will provide a template according to
+the node's type. In the case of `CharacterBody2D` it will looks like the following.
+
+![](./images/script_character.png)
+
+Let's break down the code.
+
+The first line of the code will be the following
+```gdscript
+extends CharacterBody2D
+```
+
+This line tell Godot that this script **extends** the `CharacterBody2D` class. **Extends** mean
+this piece of code use some of the code already written on for the `CharacterBody2D`. If you hover
+on the text, Godot will show a quick documentation about the class as a menu.
+
+![](./images/documentation_character_body_2d.png)
+
+```gdscript
+const SPEED = 300.0
+const JUMP_VELOCITY = -400.0
+```
+This is used to defined a constant. Remember what a constant is? It's a value that will never change
+when the code run. In GDScript, you can define a constant by using `const` keyword then followed by
+an _identifier_ (alphanumeric characters) an equal sign then the value. Right now there's two constant
+`SPEED` and `JUMP_VELOCITY`. 
+
+> [!NOTE]
+> Constant usually written in all `UPPER_CASE` and underscrores (`_`) so everyone can easily tell
+> that this is a constant.
+
+```gdscript
+func _physics_process(delta: float) -> void:
+    ...
+```
+
+This is a function definition named `_physics_process`. In GDScript to define a function you
+start with a `func` keyword followed by an identifier. In GDScript there are several function
+that have a special meaning. The more common one are `_ready`, `_process`, and `_physics_process`.
+If you remember in arduino, there are function called `loop` and `init`. You can think of `_ready`
+as the `init` in GDScript, here you define the initialization step. `_process` and `_physics_process`
+is the `loop` function in GDScript. Both function will be called every time all the `_process` and
+`_physics_process` function have been called. The difference between `_process` and `_physics_process`
+is that `_process` will be recalled only after Godot have drawn the scene onto the screen, while
+`_physics_process` run on a different thread, wo it doesn't need to wait for the scene to be drawn.
