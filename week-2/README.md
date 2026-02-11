@@ -194,15 +194,75 @@ an _identifier_ (alphanumeric characters) an equal sign then the value. Right no
 
 ```gdscript
 func _physics_process(delta: float) -> void:
-    ...
+	# Add the gravity.
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+
+	# Handle jump.
+	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+
+	# Get the input direction and handle the movement/deceleration.
+	# As good practice, you should replace UI actions with custom gameplay actions.
+	var direction := Input.get_axis("ui_left", "ui_right")
+	if direction:
+		velocity.x = direction * SPEED
+	else:
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+
+	move_and_slide()
 ```
 
 This is a function definition named `_physics_process`. In GDScript to define a function you
 start with a `func` keyword followed by an identifier. In GDScript there are several function
 that have a special meaning. The more common one are `_ready`, `_process`, and `_physics_process`.
+
 If you remember in arduino, there are function called `loop` and `init`. You can think of `_ready`
 as the `init` in GDScript, here you define the initialization step. `_process` and `_physics_process`
 is the `loop` function in GDScript. Both function will be called every time all the `_process` and
-`_physics_process` function have been called. The difference between `_process` and `_physics_process`
+`_physics_process` function have been called.
+
+The difference between `_process` and `_physics_process`
 is that `_process` will be recalled only after Godot have drawn the scene onto the screen, while
 `_physics_process` run on a different thread, wo it doesn't need to wait for the scene to be drawn.
+
+```gdscript
+	# Add the gravity.
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+```
+These lines of code tell Godot to first check if the node is on the floor by calling the `is_on_floor` function.
+`is_on_floor` function is already define for the `CharacterBody2D` so our `Player` node can directly
+call it. If the `Player` is not on the floor the velocity will be affected by the gravity.
+
+```gdscript
+	# Handle jump.
+	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+```
+These lines of code check if the `"ui_accept"` input is have just pressed and check if the `Player`
+is on floor. If true, the `y` component of `velocity` is set to the `JUMP_VELOCITY` to simulate the
+`Player` jumping.
+
+`Input` is a special _class_ that always exist (this concept is known as singleton).
+`Input` provides several function related to reading input, here `is_action_just_presses` function
+is used to check if a class of input called `ui_accept` have been just pressed recently.
+
+```gdscript
+	# Get the input direction and handle the movement/deceleration.
+	# As good practice, you should replace UI actions with custom gameplay actions.
+	var direction := Input.get_axis("ui_left", "ui_right")
+	if direction:
+		velocity.x = direction * SPEED
+	else:
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+```
+These lines of code tell Godot to check if `"ui_left"` and `"ui_right"` input is being pressed and
+here `"ui_left"` is given as the negative value and `"ui_right"` is given as the positive value.
+`Input` will aggregate both of the value depending if any of the input group is being pressed.
+By default the left and right arrow is part of the `"ui_left"` and `"ui_right"` input group.
+If any of the key is being pressed the value of direction will be assigned non-zero value, and
+then checked by in the `if` condition.
+
+> [!NOTE]
+> Non-zero value is considered as `true` in godot.
